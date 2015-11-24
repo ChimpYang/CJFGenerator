@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<!-- 特性修改 -->
+	<bean id="cumMenu1" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="CurrentStatus" />
+		<property name="fieldName" value="currentStatus" />
+		<property name="propertyName" value="currentStatus" />
+	</bean>
+	
+	<bean id="cumMenu2" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="MenuCode" />
+		<property name="fieldName" value="menuCode" />
+		<property name="propertyName" value="menuCode" />
+	</bean>
+	
+	<!-- 子表数据查询 -->
+
+	
+	<!-- lookup字段;即编码转名称字段 -->
+	<bean id="lkMenu1" class="org.cjf.util.generator.mapper.LookupFieldMeta">
+		<property name="lookupTable" value="CJF_SYSTYPE_VAL" />
+		<!-- prefixName不允许＝a -->
+		<property name="prefixName" value="s" />
+		<property name="mainField" value="menuTypeCode" />
+		<property name="joinField" value="sysValueCode" />
+		<property name="lookupFields">
+			<list>
+				<value>sysValueName</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 主要配置 -->
+	<bean id="configMenu" class="org.cjf.util.generator.mapper.TableFieldMetaConfig">
+		<property name="entityName" value="Menu" />
+		<property name="bizFieldName" value="menuCode" />
+		<property name="bizPropertyName" value="menuCode" />
+
+		<property name="listQueryLikeFiled">
+			<list>
+				<value>menuCode</value>
+				<value>menuTitle</value>
+				<value>menuMemo</value>
+				<value>menuContent</value>
+				<value>menuAction</value>
+			</list>
+		</property>
+		<property name="listNotInsert">
+			<list>
+				<value>id</value>
+			</list>
+		</property>
+		<property name="listNotUpdate">
+			<list>
+				<value>id</value>
+				<value>menuCode</value>
+				<value>currentStatus</value>
+			</list>
+		</property>
+		<property name="listNotQuery">
+			<list>
+				<value>menuMemo</value>
+				<value>menuIcon</value>
+			</list>
+		</property>
+		<property name="customUpdateList">
+			<list>
+				<ref bean="cumMenu1" />
+				<ref bean="cumMenu2" />
+			</list>
+		</property>
+		<property name="listLookup">
+			<list>
+				<ref bean="lkMenu1" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>

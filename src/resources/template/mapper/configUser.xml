@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<!-- 特性修改 -->
+	<bean id="cumUser1" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="UserCode" />
+		<property name="fieldName" value="userCode" />
+		<property name="propertyName" value="userCode" />
+	</bean>
+	
+	<bean id="cumUser2" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="Password" />
+		<property name="fieldName" value="password" />
+		<property name="propertyName" value="password" />
+	</bean>
+	
+	<bean id="cumUser3" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="CurrentStatus" />
+		<property name="fieldName" value="currentStatus" />
+		<property name="propertyName" value="currentStatus" />
+	</bean>
+	<!-- 子表数据查询 -->
+	<bean id="rmUser1" class="org.cjf.util.generator.mapper.RelationMeta">
+		<property name="relationName" value="RoleUser" />
+		<property name="relationFiledName" value="userCode" />
+		<property name="relationTableName" value="CJF_ROLEUSER" />
+	</bean>
+	<!-- lookup字段;即编码转名称字段 -->
+	<bean id="lkUser1" class="org.cjf.util.generator.mapper.LookupFieldMeta">
+		<property name="lookupTable" value="CJF_EMP" />
+		<!-- prefixName不允许＝a -->
+		<property name="prefixName" value="e" />
+		<property name="mainField" value="empCode" />
+		<property name="joinField" value="empCode" />
+		<property name="lookupFields">
+			<list>
+				<value>empName</value>
+				<value>deptCode</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 主要配置 -->
+	<bean id="configUser" class="org.cjf.util.generator.mapper.TableFieldMetaConfig">
+		<property name="entityName" value="User" />
+		<property name="bizFieldName" value="userCode" />
+		<property name="bizPropertyName" value="userCode" />
+
+		<property name="listQueryLikeFiled">
+			<list>
+				<value>userCode</value>
+				<value>userName</value>
+			</list>
+		</property>
+		<property name="listNotInsert">
+			<list>
+				<value>id</value>
+			</list>
+		</property>
+		<property name="listNotUpdate">
+			<list>
+				<value>userCode</value>
+				<value>password</value>
+				<value>currentStatus</value>
+			</list>
+		</property>
+		<property name="listNotQuery">
+			<list>
+				<value>validDate</value>
+				<value>password</value>
+				<value>createDate</value>
+				<value>lastModifyDate</value>
+			</list>
+		</property>
+		<property name="customUpdateList">
+			<list>
+				<ref bean="cumUser1" />
+				<ref bean="cumUser2" />
+				<ref bean="cumUser3" />
+			</list>
+		</property>
+		<property name="relationList">
+			<list>
+				<ref bean="rmUser1" />
+			</list>
+		</property>
+		<property name="listLookup">
+			<list>
+				<ref bean="lkUser1" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<!-- 特性修改 -->
+	<bean id="cumSysTypeVal" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="SysFlag" />
+		<property name="fieldName" value="sysFlag" />
+		<property name="propertyName" value="sysFlag" />
+	</bean>
+	
+	<!-- lookup字段;即编码转名称字段 -->
+	<bean id="lkSysTypeVal" class="org.cjf.util.generator.mapper.LookupFieldMeta">
+		<property name="lookupTable" value="CJF_SYSTYPE" />
+		<!-- prefixName不允许＝a -->
+		<property name="prefixName" value="s" />
+		<property name="mainField" value="sysTypeCode" />
+		<property name="joinField" value="sysTypeCode" />
+		<property name="lookupFields">
+			<list>
+				<value>sysTypeName</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 主要配置 -->
+	<bean id="configSysTypeVal" class="org.cjf.util.generator.mapper.TableFieldMetaConfig">
+		<!-- 与entityPropertyMeta.xml中的配置要匹配 -->
+		<property name="entityName" value="SysTypeValue" />
+		
+		<property name="bizFieldName" value="sysValueCode" />
+		<property name="bizPropertyName" value="sysValueCode" />
+
+		<property name="listQueryLikeFiled">
+			<list>
+				<value>sysValueName</value>
+				<value>sysValue</value>
+				<value>sysValue2</value>
+				<value>sysValue3</value>
+			</list>
+		</property>
+		
+		<property name="listNotInsert">
+			<list>
+				<value>id</value>
+			</list>
+		</property>
+		<property name="listNotUpdate">
+			<list>
+				<value>id</value>
+				<value>sysTypeCode</value>
+				<value>sysFlag</value>
+			</list>
+		</property>
+		<property name="listNotQuery">
+			<list>
+			</list>
+		</property>
+		<property name="customUpdateList">
+			<list>
+				<ref bean="cumSysTypeVal" />
+			</list>
+		</property>
+		<property name="listLookup">
+			<list>
+				<ref bean="lkSysTypeVal" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>

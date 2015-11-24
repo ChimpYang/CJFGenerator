@@ -1,0 +1,139 @@
+package ${ActionPackage};
+
+#if($hasLastModifyDate)
+import java.util.Date;
+
+#end
+import org.apache.log4j.Logger;
+import org.cjf.action.AbstractWebAction;
+import org.cjf.biz.BusinessLogic;
+#if(${BizPackage} != "org.cjf.biz" || ${BizInterface} != "BusinessLogic")
+import ${BizPackage}.${BizInterface};
+#end
+import org.cjf.entity.${EntityName};
+import org.cjf.util.json.JSONUtil;
+import org.cjf.utils.properties.AppConst;
+import org.cjf.utils.properties.AppConst.ActionType;
+
+/**
+ * @author CJF Generator
+ * @version ${ModifyCustomActionVersion}
+ */
+public class ${EntityName}Modify${PropertyFunctionName}Action extends AbstractWebAction<${EntityName}> {
+
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(${EntityName}Modify${PropertyFunctionName}Action.class);
+	
+	public ${EntityName}Modify${PropertyFunctionName}Action() {
+		actionType = ActionType.Modify;
+	}
+	
+	@Override
+	protected boolean process(Object obj) {
+		${EntityName} item = (${EntityName})obj;
+		
+#if($hasLastModifyDate)
+		item.setLastModifyDate(new Date(System.currentTimeMillis()));
+#end
+		
+		int count = biz.modifyCustom(item, "${CustomStatementId}");
+		if(count != 1) {
+			message = "修改失败，修改个数为0.";
+			errorCode = AppConst.ACTION_ERROR_DB;
+			
+			jsonObject.put("success", false);
+			jsonObject.put("obj", getEmptyObjString());
+			jsonObject.put("message", message); 
+			jsonObject.put("errcode", errorCode);
+			
+			jsonValue = jsonObject.toString();
+			
+			return false;
+		}
+		
+		message = "修改成功。";
+		
+		jsonObject.put("success", true);
+		jsonObject.put("obj", getEmptyObjString());
+		jsonObject.put("message", message); 
+		jsonObject.put("errcode", errorCode);
+		
+		jsonValue = jsonObject.toString();
+		
+		return true;
+	}
+
+	@Override
+	protected Object getParamObject() {
+		if(null == jsonString || "".equals(jsonString)) {
+			message = "null param object.";
+			return null;
+		}
+		
+		${EntityName} item = (${EntityName})JSONUtil.jsonStrToObj(jsonString, new ${EntityName}());
+		
+		return item;
+	}
+
+	@Override
+	protected boolean checkParam(Object obj) {
+		if(null == obj) {
+			return false;
+		}
+		
+		${EntityName} item = (${EntityName})obj;
+		
+		if(item.getId() <= 0) {
+			message = "id <= 0";
+			return false;
+		}
+	
+
+#if($PropertyType == 'String')
+		//TODO; GENERATOR; 修改判断类型
+		if(null == item.get${PropertyFunctionName}() || "".equals(item.get${PropertyFunctionName}())) {
+			message = "null or empty ${PropertyFunctionName}";
+			return false;
+		}
+#elseif($PropertyType == 'int')
+		//TODO; GENERATOR; 修改判断类型
+		if(item.get${PropertyFunctionName}() <= 0) {
+			message = "${PropertyFunctionName} <= 0";
+			return false;
+		}
+#elseif($PropertyType == 'Date')
+		//TODO; GENERATOR; 修改判断类型
+		if(item.get${PropertyFunctionName}() == null) {
+			message = "null ${PropertyFunctionName}";
+			return false;
+		}
+#end
+		
+		//TODO; GENERATOR; 检查其他参数
+		
+		if(null == biz) {
+			message = "null biz.";
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	protected boolean getPermission() {
+		//TODO; 得到真实的权限
+		return true;
+	}
+	
+	@Override
+	protected Logger getLogger() {
+		return logger;
+	}
+
+	private ${BizInterface}<${EntityName}> biz;
+	@Override
+	public void setBiz(BusinessLogic<${EntityName}> biz) {
+		this.biz = (${BizInterface}<${EntityName}>)biz;
+	}
+
+}

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${NAMESPACE}.${ENTITYNAME}Mapper">
+	<!--
+ 	Author CJF Generator
+ 	Version ${MapperVersion}
+	-->
+#if(!$hasLookupField)
+	<sql id="criteriaSql">
+		from ${TABLENAME}
+		<where>
+#foreach($item in $fieldMetaList)  
+#if($item.conditionType == "IntEqual" && $item.canQuery)
+			<if test="${item.propertyName} != 0">
+				and ${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "ObjEqual" && $item.canQuery)
+			<if test="${item.propertyName} != null">
+				and ${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "StringEqual" && $item.canQuery)
+			<if test="${item.propertyName} != null and ${item.propertyName} != ''">
+				and ${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "StringLike" && $item.canQuery)
+			<if test="${item.propertyName} != null and ${item.propertyName} != ''">
+				and ${item.fieldName} like '%${${item.propertyName}}%'
+			</if>
+#end
+#end
+		</where>
+		order by id
+	</sql>
+	
+	<select id="list" parameterType="${ENTITYNAME}" resultType="${ENTITYNAME}">
+		select *
+		<include refid="criteriaSql" />
+	</select>
+		
+	<select id="count" parameterType="${ENTITYNAME}" resultType="int">
+		select count(id) 
+		<include refid="criteriaSql" />
+	</select>
+	
+	<select id="single" parameterType="${ENTITYNAME}" resultType="${ENTITYNAME}">
+		select * from ${TABLENAME}
+		where id = #{id}
+	</select>	
+#end
+## end of if - no lookup field
+
+#if($hasLookupField)
+	<sql id="criteriaSql">
+		<where>
+#foreach($item in $fieldMetaList)  
+#if($item.conditionType == "IntEqual" && $item.canQuery)
+			<if test="${item.propertyName} != 0">
+				and a.${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "ObjEqual" && $item.canQuery)
+			<if test="${item.propertyName} != null">
+				and a.${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "StringEqual" && $item.canQuery)
+			<if test="${item.propertyName} != null and ${item.propertyName} != ''">
+				and a.${item.fieldName} = #{${item.propertyName}}
+			</if>
+#elseif($item.conditionType == "StringLike" && $item.canQuery)
+			<if test="${item.propertyName} != null and ${item.propertyName} != ''">
+				and a.${item.fieldName} like '%${${item.propertyName}}%'
+			</if>
+#end
+#end
+		</where>
+		order by a.id
+	</sql>
+	
+	<sql id="lookupFieldSql">
+		select a.*, #foreach($item in $lookupList)
+#foreach($field in $item.lookupFields)
+${item.prefixName}.${field}#if($foreach.hasNext), #end
+#end#if($foreach.hasNext), #end
+#end from ${TABLENAME} a
+#foreach($item in $lookupList)
+		${item.joinType} ${item.lookupTable} ${item.prefixName} on a.${item.mainField} = ${item.prefixName}.${item.joinField}
+#end
+	</sql>
+	
+	<select id="list" parameterType="${ENTITYNAME}" resultType="${ENTITYNAME}">
+		<include refid="lookupFieldSql" />
+		<include refid="criteriaSql" />
+	</select>
+		
+	<select id="count" parameterType="${ENTITYNAME}" resultType="int">
+		select count(id) from ${TABLENAME} a
+		<include refid="criteriaSql" />
+	</select>
+	
+	<select id="single" parameterType="${ENTITYNAME}" resultType="${ENTITYNAME}">
+		<include refid="lookupFieldSql" />
+		where a.id = #{id}
+	</select>	
+#end
+## end of if - has lookup field
+
+	<select id="countBiz" parameterType="${ENTITYNAME}" resultType="int">
+		select count(id) from ${TABLENAME}
+		where ${BIZFILEDNAME} = #{${BIZPROPERTYNAME}}
+	</select>
+
+	<select id="countModifyCheck" parameterType="${ENTITYNAME}" resultType="int">
+		select count(id) from ${TABLENAME}
+		where ${BIZFILEDNAME} = #{${BIZPROPERTYNAME}}
+		and id != #{id}
+	</select>
+	
+	<select id="singleByCode" parameterType="${ENTITYNAME}" resultType="${ENTITYNAME}">
+		select * from ${TABLENAME}
+		where ${BIZFILEDNAME} = #{${BIZPROPERTYNAME}}
+	</select>
+	
+	<insert id="add" parameterType="${ENTITYNAME}" useGeneratedKeys="true" keyProperty="id">
+		insert into ${TABLENAME} 
+		(#foreach($item in $fieldMetaList)  
+#if($item.canInsert)
+${item.fieldName}#if($foreach.hasNext), #end
+#end
+#end)
+		values 
+		(#foreach($item in $fieldMetaList)  
+#if($item.canInsert)
+#{${item.propertyName}}#if($foreach.hasNext), #end
+#end
+#end)
+	</insert>
+	
+	<sql id="criteriaUpdate">
+		update ${TABLENAME} 
+		<set>
+#foreach($item in $fieldMetaList)  
+#if($item.conditionType == "IntEqual" && $item.canUpdate)
+			<if test="${item.propertyName} != 0">
+				${item.fieldName} = #{${item.propertyName}}#if($foreach.hasNext), #end
+			
+			</if>
+#elseif($item.conditionType == "ObjEqual" && $item.canUpdate)
+			<if test="${item.propertyName} != null">
+				${item.fieldName} = #{${item.propertyName}}#if($foreach.hasNext), #end
+			
+			</if>
+#elseif(($item.conditionType == "StringEqual" || $item.conditionType == "StringLike") && $item.canUpdate)
+			<if test="${item.propertyName} != null and ${item.propertyName} != ''">
+				${item.fieldName} = #{${item.propertyName}}#if($foreach.hasNext), #end
+			
+			</if>
+#end
+#end
+		</set>
+	</sql>
+
+	<update id="update" parameterType="${ENTITYNAME}">
+		<include refid="criteriaUpdate" />
+		where id = #{id}
+	</update>
+	
+	<update id="updateByCode" parameterType="${ENTITYNAME}">
+		<include refid="criteriaUpdate" />
+		where ${BIZFILEDNAME} = #{${BIZPROPERTYNAME}}
+	</update>
+	
+	<delete id="delete" parameterType="${ENTITYNAME}">
+		delete from ${TABLENAME}  
+		where id = #{id}
+	</delete>
+	
+	<delete id="deleteByCode" parameterType="${ENTITYNAME}">
+		delete from ${TABLENAME}  
+		where ${BIZFILEDNAME} = #{${BIZPROPERTYNAME}}
+	</delete>
+	
+	<delete id="clear">
+		delete from ${TABLENAME} 
+	</delete>
+	
+#foreach($item in $customUpdateList)  
+	<update id="update$item.updateName" parameterType="${ENTITYNAME}">
+		update ${TABLENAME} 
+		set $item.fieldName = #{$item.propertyName} 
+		where id = #{id}
+	</update>
+	
+#end
+#foreach($item in $relationList) 
+	<select id="CR_$item.relationName" parameterType="${ENTITYNAME}" resultType="int">
+		select count(id) from $item.relationTableName
+		where $item.relationFiledName = #{${BIZPROPERTYNAME}}
+	</select>	
+	
+#end
+</mapper>	

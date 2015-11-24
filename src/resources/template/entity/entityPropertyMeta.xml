@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+		
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.cjf.util.generator.GeneratorConfig" />
+		<property name="targetMethod" value="addTableToEntityConfg" />
+		<property name="arguments">
+			<map>
+				<!--  
+				<entry key="CJF_AUTH" value="Auth" />
+				<entry key="CJF_DEPT" value="Dept" />
+				<entry key="CJF_DEPT_INFO" value="DeptInfo" />
+				<entry key="CJF_EMP" value="Emp" />
+				<entry key="CJF_EMP_INFO" value="EmpInfo" />
+				<entry key="CJF_MENU" value="Menu" />
+				<entry key="CJF_POST" value="Post" />
+				<entry key="CJF_POST_EMP" value="PostEmp" />
+				<entry key="CJF_POST_INFO" value="PostInfo" />
+				<entry key="CJF_ROLE" value="Role" />
+				<entry key="CJF_ROLE_AUTH" value="RoleAuth" />
+				<entry key="CJF_ROLE_USER" value="RoleUser" />
+				<entry key="CJF_SYSTYPE" value="SysType" />
+				<entry key="CJF_USER" value="User" />
+				<entry key="CJF_SYSTYPE_VAL" value="SysTypeValue" />
+				-->
+				<entry key="CJF_MENU" value="Menu" />
+			</map>
+		</property>
+	</bean>
+</beans>

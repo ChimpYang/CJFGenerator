@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"  />
+		<property name="url" value="jdbc:sqlserver://192.168.1.141:1433;databaseName=WEBNJHH" />
+		<property name="username" value="huangh" />
+		<property name="password" value="huangh" />
+		<property name="maxActive" value="5" />
+		<property name="maxIdle" value="5" />
+		<property name="maxWait" value="5" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="removeAbandoned" value="false" />
+	</bean>
+	
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.cjf.util.generator.GeneratorConfig" />
+		<property name="targetMethod" value="setSchemaPattern" />
+		<property name="arguments" value="dbo" />
+	</bean>
+</beans>

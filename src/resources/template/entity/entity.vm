@@ -1,0 +1,47 @@
+package ${PACKAGENAME};
+
+#if($hasDateField)
+import java.util.Date;
+
+#end
+/**
+ * @author CJF Generator
+ * @version ${EntityVersion}
+ */
+public class ${ENTITYNAME} implements Entity {
+
+	private static final long serialVersionUID = 1L;
+
+#foreach($item in $propertyList) 
+	private ${item.propertyType} ${item.propertyName};
+#end
+
+#foreach($item in $lookupList)
+	private ${item.propertyType} ${item.propertyName};
+#end
+
+#foreach($item in $propertyList) 
+	public ${item.propertyType} get${item.propertyFunctionName}() {
+		return ${item.propertyName};
+	}
+
+	public void set${item.propertyFunctionName}(${item.propertyType} ${item.propertyName}) {
+		this.${item.propertyName} = ${item.propertyName};
+	}
+	
+#end
+#foreach($item in $lookupList) 
+	public ${item.propertyType} get${item.propertyFunctionName}() {
+		return ${item.propertyName};
+	}
+
+	public void set${item.propertyFunctionName}(${item.propertyType} ${item.propertyName}) {
+		this.${item.propertyName} = ${item.propertyName};
+	}
+	
+#end
+	@Override
+	protected Object clone() throws CloneNotSupportedException {  
+		return super.clone();
+	}
+}

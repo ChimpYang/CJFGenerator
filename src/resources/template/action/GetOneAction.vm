@@ -1,0 +1,93 @@
+package ${ActionPackage};
+
+import org.apache.log4j.Logger;
+import org.cjf.action.AbstractWebAction;
+import org.cjf.biz.BusinessLogic;
+#if(${BizPackage} != "org.cjf.biz" || ${BizInterface} != "BusinessLogic")
+import ${BizPackage}.${BizInterface};
+#end
+import org.cjf.entity.${EntityName};
+import org.cjf.util.json.JSONUtil;
+import org.cjf.utils.properties.AppConst.ActionType;
+
+/**
+ * @author CJF Generator
+ * @version ${GetOneActionVersion}
+ */
+public class ${EntityName}GetOneAction extends AbstractWebAction<${EntityName}> {
+	
+	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(${EntityName}GetOneAction.class);
+	
+	public ${EntityName}GetOneAction() {
+		actionType = ActionType.GetOne;
+	}
+
+	@Override
+	protected boolean process(Object obj) {
+		${EntityName} item = (${EntityName})obj;
+		
+		item = biz.getOne(item);
+		jsonValue = JSONUtil.objToJsonStr(item, getEmptyObjString());
+		
+		if(null == item) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	protected Object getParamObject() {
+		if(null == jsonString || "".equals(jsonString)) {
+			message = "null param object.";
+			return null;
+		} else {
+			message = jsonString;
+		}
+		
+		${EntityName} item = (${EntityName})JSONUtil.jsonStrToObj(jsonString, new ${EntityName}());
+		
+		return item;
+	}
+
+	@Override
+	protected boolean checkParam(Object obj) {
+		if(null == obj) {
+			message = "null param obj.";
+			return false;
+		}
+		
+		${EntityName} item = (${EntityName})obj;
+		
+		if(item.getId() <= 0) {
+			message = "id <= 0";
+			return false;
+		}
+		
+		if(null == biz) {
+			message = "null biz.";
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	protected boolean getPermission() {
+		//TODO; 得到真实的权限
+		return true;
+	}
+	
+	@Override
+	protected Logger getLogger() {
+		return logger;
+	}
+
+	private ${BizInterface}<${EntityName}> biz;
+	@Override
+	public void setBiz(BusinessLogic<${EntityName}> biz) {
+		this.biz = (${BizInterface}<${EntityName}>)biz;
+	}
+
+}

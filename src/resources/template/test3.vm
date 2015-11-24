@@ -1,0 +1,4 @@
+	<select id="${mapperId}" parameterType="${parameterType}" resultType="${resultType}">
+		select count(id) from ${tableName}
+		where ${fieldName} = #{${propertyName}}
+	</select>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<context:annotation-config />
+
+	<import resource="app4mysql5.xml" />
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.cjf.util.generator.GeneratorConfig" />
+		<property name="targetMethod" value="setConfig" />
+		<property name="arguments">
+			<!-- 里面的内容需要按顺序配置 -->
+			<list>
+				<!-- Entity模版文件存放路基 -->
+				<value>/resources/template/entity</value>
+				<!-- Entity模版文件名 -->
+				<value>entity.vm</value>
+				<!-- Entity存放路径 -->
+				<value>/Users/Chimp/Temp/Entity</value>
+				<!-- Entity包名称 -->
+				<value>org.cjf.entity</value>
+
+				<!-- Mapper模版文件存放路基 -->
+				<value>/resources/template/mapper</value>
+				<!-- Mapper模版文件名 -->
+				<value>mapper.vm</value>
+				<!-- Mapper存放路径 -->
+				<value>/Users/Chimp/Temp/Mapper</value>
+				<!-- Mapper命名空间 -->
+				<value>org.cjf.entity.mysql5</value>
+
+				<!-- Action模版文件路径 -->
+				<value>/resources/template/action</value>
+				<!-- Action存放路径 -->
+				<value>/Users/Chimp/Temp/Action</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 每次修改了模版文件，请对增加对应模版文件的版本号，用来辨别已生成文件的版本是否是最新的 -->
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.cjf.util.generator.GeneratorConfig" />
+		<property name="targetMethod" value="addVersionMap" />
+		<property name="arguments">
+			<map>
+				<entry key="EntityVersion" value="1.0" />
+				<entry key="MapperVersion" value="1.0" />
+				
+				<entry key="RemoveActionVersion" value="1.0" />
+				<entry key="CreateActionVersion" value="1.0" />
+				<entry key="GetListActionVersion" value="1.0" />
+				<entry key="GetOneActionVersion" value="1.0" />
+				<entry key="ModifyActionVersion" value="1.0" />
+				<entry key="ModifyCustomActionVersion" value="1.0" />
+			</map>
+		</property>
+	</bean>
+
+	<import resource="./entity/entityPropertyMeta.xml" />
+	<import resource="./mapper/tableFieldMeta.xml" />
+	<import resource="./action/actionMeta.xml" />
+</beans>
