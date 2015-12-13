@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -29,6 +30,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class RunGeneratorAction {
+	private static Logger log = Logger.getLogger(RunGeneratorAction.class);
+	
 	public static void main(String[] args) throws SQLException {
 		RunGeneratorAction generator = new RunGeneratorAction();
 		
@@ -61,6 +64,9 @@ public class RunGeneratorAction {
 		for(Map.Entry<String, ActionMetaConfig> entry : actionConfigMap.entrySet()) {
 			actionMetaCofing = entry.getValue();
 			tableName = actionMetaCofing.getTableName();
+			
+			log.info("customUpdate - tableName: " + tableName);
+			
 			List<CustomUpdateMeta> customUpdateList = getCustomUpdateList(tableName);
 			processOneEntity(actionMetaCofing, customUpdateList);
 		}

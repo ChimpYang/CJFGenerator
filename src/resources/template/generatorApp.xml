@@ -23,7 +23,7 @@
 				<!-- Entity模版文件名 -->
 				<value>entity.vm</value>
 				<!-- Entity存放路径 -->
-				<value>/Users/Chimp/Temp/Entity</value>
+				<value>/Users/Chimp/Temp/Generator/Entity</value>
 				<!-- Entity包名称 -->
 				<value>org.cjf.entity</value>
 
@@ -32,14 +32,14 @@
 				<!-- Mapper模版文件名 -->
 				<value>mapper.vm</value>
 				<!-- Mapper存放路径 -->
-				<value>/Users/Chimp/Temp/Mapper</value>
+				<value>/Users/Chimp/Temp/Generator/Mapper</value>
 				<!-- Mapper命名空间 -->
 				<value>org.cjf.entity.mysql5</value>
 
 				<!-- Action模版文件路径 -->
 				<value>/resources/template/action</value>
 				<!-- Action存放路径 -->
-				<value>/Users/Chimp/Temp/Action</value>
+				<value>/Users/Chimp/Temp/Generator/Action</value>
 			</list>
 		</property>
 	</bean>

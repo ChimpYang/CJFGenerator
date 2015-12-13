@@ -7,6 +7,16 @@
 				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
 				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
 	
+	<bean id="actionDept" class="org.cjf.util.generator.action.ActionMetaConfig">
+		<property name="entityName" value="Department" />
+		<!-- 注意：这里的tableName大小写一定要与下面配置org.cjf.util.generator.GeneratorConfig中的一致 -->
+		<property name="tableName" value="CJF_DEPT" />
+		<property name="actionPackage" value="org.cjf.action.dept" />
+		<property name="bizPackage" value="org.cjf.biz" />
+		<property name="bizInterface" value="BusinessLogic" />
+		<property name="hasLastModifyDate" value="false" />
+	</bean>
+	
 	<bean id="actionMenu" class="org.cjf.util.generator.action.ActionMetaConfig">
 		<property name="entityName" value="Menu" />
 		<property name="tableName" value="CJF_MENU" />
@@ -60,9 +70,12 @@
 				<entry key="SysTypeValue">
 					<ref bean="actionSysTypeVal" />
 				</entry>
-				-->
 				<entry key="Menu">
 					<ref bean="actionMenu" />
+				</entry>
+				-->
+				<entry key="Department">
+					<ref bean="actionDept" />
 				</entry>
 			</map>
 		</property>

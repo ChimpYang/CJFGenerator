@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:/org/springframework/beans/factory/xml/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context classpath:/org/springframework/context/config/spring-context-4.0.xsd
+				http://www.springframework.org/schema/aop classpath:/org/springframework/aop/config/spring-aop-4.0.xsd
+				http://www.springframework.org/schema/tx classpath:/org/springframework/transaction/config/spring-tx-4.0.xsd">
+
+	<!-- 特性修改 -->
+	<bean id="cumDept1" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="DeptCode" />
+		<property name="fieldName" value="deptCode" />
+		<property name="propertyName" value="deptCode" />
+	</bean>
+	
+	<bean id="cumDept2" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="DeptLevel" />
+		<property name="fieldName" value="deptLevel" />
+		<property name="propertyName" value="deptLevel" />
+	</bean>
+	
+	<bean id="cumDept3" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="ParentDeptCode" />
+		<property name="fieldName" value="parentDeptCode" />
+		<property name="propertyName" value="parentDeptCode" />
+	</bean>
+	
+	<bean id="cumDept4" class="org.cjf.util.generator.mapper.CustomUpdateMeta">
+		<property name="updateName" value="DispOrder" />
+		<property name="fieldName" value="dispOrder" />
+		<property name="propertyName" value="dispOrder" />
+	</bean>
+	
+	<!-- 子表数据查询 -->
+
+	
+	<!-- lookup字段;即编码转名称字段 -->
+	<bean id="lkDept1" class="org.cjf.util.generator.mapper.LookupFieldMeta">
+		<property name="lookupTable" value="CJF_DEPT" />
+		<!-- prefixName不允许＝a -->
+		<property name="prefixName" value="s" />
+		<property name="mainField" value="parentDeptCode" />
+		<property name="joinField" value="deptCode" />
+		<property name="lookupFields">
+			<list>
+				<value>deptName as parentDeptName</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="lkDept2" class="org.cjf.util.generator.mapper.LookupFieldMeta">
+		<property name="lookupTable" value="CJF_SYSTYPE_VAL" />
+		<!-- prefixName不允许＝a -->
+		<property name="prefixName" value="s" />
+		<property name="mainField" value="deptTypeCode" />
+		<property name="joinField" value="sysValueCode" />
+		<property name="lookupFields">
+			<list>
+				<value>sysValueName as deptTypeName</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 主要配置 -->
+	<bean id="configDept" class="org.cjf.util.generator.mapper.TableFieldMetaConfig">
+		<property name="entityName" value="Department" />
+		<property name="bizFieldName" value="deptCode" />
+		<property name="bizPropertyName" value="deptCode" />
+
+		<property name="listQueryLikeFiled">
+			<list>
+				<value>deptName</value>
+				<value>deptDesc</value>
+			</list>
+		</property>
+		<property name="listNotInsert">
+			<list>
+				<value>id</value>
+			</list>
+		</property>
+		<property name="listNotUpdate">
+			<list>
+				<value>id</value>
+				<value>deptCode</value>
+				<value>deptLevel</value>
+				<value>parentDeptCode</value>
+				<value>dispOrder</value>
+			</list>
+		</property>
+		<property name="listNotQuery">
+			<list>
+				<value>deptDesc</value>
+			</list>
+		</property>
+		<property name="customUpdateList">
+			<list>
+				<ref bean="cumDept1" />
+				<ref bean="cumDept2" />
+				<ref bean="cumDept3" />
+				<ref bean="cumDept4" />
+			</list>
+		</property>
+		<property name="listLookup">
+			<list>
+				<ref bean="lkDept1" />
+				<ref bean="lkDept2" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>

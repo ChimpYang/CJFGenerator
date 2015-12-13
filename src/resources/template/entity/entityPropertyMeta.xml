@@ -29,8 +29,9 @@
 				<entry key="CJF_SYSTYPE" value="SysType" />
 				<entry key="CJF_USER" value="User" />
 				<entry key="CJF_SYSTYPE_VAL" value="SysTypeValue" />
-				-->
 				<entry key="CJF_MENU" value="Menu" />
+				-->
+				<entry key="CJF_DEPT" value="Department" />
 			</map>
 		</property>
 	</bean>

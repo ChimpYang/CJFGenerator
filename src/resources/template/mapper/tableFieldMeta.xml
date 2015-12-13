@@ -10,10 +10,10 @@
 	<import resource="configUser.xml" />
     <import resource="configRole.xml" />
     <import resource="configMenu.xml" />
+    <import resource="configDept.xml" />
     <import resource="configSysTypeVal.xml" />
 
-	<bean
-		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="org.cjf.util.generator.GeneratorConfig" />
 		<property name="targetMethod" value="addTableFieldConfig" />
 		<property name="arguments">
@@ -28,9 +28,12 @@
 				<entry key="CJF_SYSTYPE_VAL">
 					<ref bean="configSysTypeVal" />
 				</entry>
-				-->
 				<entry key="CJF_MENU">
 					<ref bean="configMenu" />
+				</entry>
+				-->
+				<entry key="CJF_DEPT">
+					<ref bean="configDept" />
 				</entry>
 			</map>
 		</property>
